@@ -93,6 +93,12 @@ app.get("/api/qr", async (_req, res) => {
   }
 });
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
+app.get("/api/stats", adminOnly, (req, res) => {
+    let total = jobs.length;
+    let pending = jobs.filter(j => j.status === "Pending" || !j.status).length;
+    let completed = jobs.filter(j => j.status === "Completed").length;
+    res.json({ total, pending, completed });
+});
 
 app.use((err, _req, res, _next) => {
   const message = err.code === "LIMIT_FILE_SIZE" ? "Each file must be 15 MB or smaller." : (err.message || "Upload failed.");
