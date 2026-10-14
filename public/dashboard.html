@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Shop Dashboard</h1>
+        <div style="margin-bottom: 20px;">
+            <a href="/admin.html">Go to Print Queue</a> | 
+            <button id="logout-btn" style="background: red; color: white; padding: 5px 10px; border: none; cursor: pointer;">Logout</button>
+        </div>
+        
+        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+            <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; text-align: center;">
+                <h3>Total Jobs</h3>
+                <p id="total-jobs" style="font-size: 24px; font-weight: bold;">0</p>
+            </div>
+            <div style="background: #fff3cd; padding: 15px; border-radius: 5px; text-align: center;">
+                <h3>Pending Jobs</h3>
+                <p id="pending-jobs" style="font-size: 24px; font-weight: bold;">0</p>
+            </div>
+            <div style="background: #d4edda; padding: 15px; border-radius: 5px; text-align: center;">
+                <h3>Completed Jobs</h3>
+                <p id="completed-jobs" style="font-size: 24px; font-weight: bold;">0</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchStats() {
+            try {
+                const res = await fetch('/api/stats');
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('total-jobs').innerText = data.total;
+                    document.getElementById('pending-jobs').innerText = data.pending;
+                    document.getElementById('completed-jobs').innerText = data.completed;
+                } else if (res.status === 401) {
+                    window.location.href = '/admin.html';
+                }
+            } catch (err) {
+                console.error('Error fetching stats:', err);
+            }
+        }
+
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/admin.html';
+        });
+
+        fetchStats();
+        setInterval(fetchStats, 5000);
+    </script>
+</body>
+</html>
