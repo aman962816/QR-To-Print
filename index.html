@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>QR to Print</title><link rel="stylesheet" href="/style.css"></head>
+<body><header class="hero"><div class="mark">▦</div><h1>QR TO PRINT</h1><p>Scan • Upload • Print</p><span>आपकी फाइल, आसान प्रिंट</span></header>
+<main class="wrap"><section class="card center"><h2>ग्राहक के लिए QR Code</h2><p>इस QR कोड को डाउनलोड करके दुकान पर लगाएँ। ग्राहक स्कैन करके फाइल भेज सकेंगे।</p><img id="qr" class="qr" alt="Upload page QR code"><p id="target" class="muted"></p><a id="download" class="btn secondary" download="qr-to-print.png">QR Code डाउनलोड करें</a></section>
+<section class="tiles"><a class="tile" href="/upload.html"><b>ग्राहक पेज</b><span>फाइल अपलोड करें</span></a><a class="tile" href="/admin.html"><b>एडमिन पैनल</b><span>ऑर्डर और प्रिंट मैनेज करें</span></a></section>
+<p class="notice">पहली बार इस्तेमाल करने से पहले README पढ़ें और एडमिन पासवर्ड बदलें।</p></main><script>
+fetch('/api/qr').then(r=>r.json()).then(d=>{document.getElementById('qr').src=d.dataUrl;document.getElementById('download').href=d.dataUrl;document.getElementById('target').textContent=d.target;}).catch(()=>{document.getElementById('target').textContent='QR बनाने में समस्या हुई।';});
+</script></body></html>

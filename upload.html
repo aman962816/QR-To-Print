@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>फाइल भेजें | QR to Print</title><link rel="stylesheet" href="/style.css"></head>
+<body><header class="smallhero"><a href="/" class="back">← QR to Print</a><h1>अपनी फाइल भेजें</h1><p>PDF या फोटो चुनें और प्रिंट के लिए भेजें।</p></header>
+<main class="wrap narrow"><form id="uploadForm" class="card">
+<label>आपका नाम <input name="customerName" maxlength="80" placeholder="नाम (वैकल्पिक)"></label>
+<label>मोबाइल नंबर <input name="phone" inputmode="tel" maxlength="20" placeholder="मोबाइल नंबर (वैकल्पिक)"></label>
+<label>PDF / फोटो चुनें <input type="file" name="files" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/*" multiple required></label><small>PDF, JPG, PNG या WEBP • अधिकतम 5 फाइलें • प्रत्येक 15 MB तक</small>
+<div class="two"><label>कॉपी की संख्या<input name="copies" type="number" min="1" max="100" value="1" required></label><label>पेपर साइज<select name="paper"><option>A4</option></select></label></div>
+<label>प्रिंट का प्रकार<select name="color"><option value="black-white">ब्लैक एंड व्हाइट</option><option value="color">कलर</option></select></label>
+<p class="notice">कृपया केवल वही दस्तावेज़ भेजें जिन्हें प्रिंट करवाने की अनुमति आपके पास है। संवेदनशील दस्तावेज़ भेजने से पहले दुकान से पूछें।</p>
+<button class="btn" type="submit">फाइल प्रिंट के लिए भेजें</button><p id="result" role="status"></p></form></main>
+<script>
+const form=document.getElementById('uploadForm'), result=document.getElementById('result');
+form.addEventListener('submit',async e=>{e.preventDefault();const btn=form.querySelector('button');btn.disabled=true;btn.textContent='अपलोड हो रहा है…';result.textContent='';
+try{const r=await fetch('/api/upload',{method:'POST',body:new FormData(form)});const d=await r.json();if(!r.ok)throw new Error(d.error||'अपलोड नहीं हुआ');result.className='success';result.textContent=d.message+' आपका Job ID: '+d.jobId;form.reset();}catch(err){result.className='error';result.textContent=err.message;}finally{btn.disabled=false;btn.textContent='फाइल प्रिंट के लिए भेजें';}});
+</script></body></html>
